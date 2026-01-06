@@ -1,0 +1,1275 @@
+definitions:
+  dto.InvestmentDTO:
+    properties:
+      amount:
+        type: number
+    required:
+    - amount
+    type: object
+  dto.LoginUserDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.PlanDTO:
+    properties:
+      duration:
+        type: integer
+      max_amount:
+        type: number
+      min_amount:
+        type: number
+      name:
+        type: string
+      roi:
+        type: number
+    required:
+    - duration
+    - max_amount
+    - min_amount
+    - name
+    - roi
+    type: object
+  dto.RegisterUserDTO:
+    properties:
+      country:
+        type: string
+      email:
+        type: string
+      fullname:
+        maxLength: 50
+        minLength: 2
+        type: string
+      gender:
+        enum:
+        - male
+        - female
+        - other
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone_number:
+        maxLength: 15
+        minLength: 7
+        type: string
+      username:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - country
+    - email
+    - fullname
+    - gender
+    - password
+    - phone_number
+    - username
+    type: object
+  dto.ResetPasswordDTO:
+    properties:
+      confirm_password:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+    required:
+    - confirm_password
+    - password
+    - token
+    type: object
+  dto.ResetPasswordLinkDTO:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  dto.UpdatePasswordDTO:
+    properties:
+      confirm_password:
+        type: string
+      new_password:
+        type: string
+      old_password:
+        type: string
+    required:
+    - confirm_password
+    - new_password
+    - old_password
+    type: object
+  dto.UpdateUserBalanceDTO:
+    properties:
+      invested_amount:
+        type: number
+      profit_balance:
+        type: number
+      referal_bonus:
+        type: number
+      wallet_balance:
+        type: number
+    required:
+    - invested_amount
+    - profit_balance
+    - referal_bonus
+    - wallet_balance
+    type: object
+  dto.WithdrawalDTO:
+    properties:
+      amount:
+        type: number
+      coin_type:
+        type: string
+      wallet_address:
+        type: string
+    required:
+    - amount
+    - coin_type
+    - wallet_address
+    type: object
+  response.ApiResponse:
+    properties:
+      data: {}
+      error: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is my Go Inv API.
+  title: My Inv API
+  version: "1.0"
+paths:
+  /admin/dashboard:
+    get:
+      description: Returns dashboard data for admin dashboard
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Admin dashboard data
+      tags:
+      - Admin Dashboard
+  /admin/deposit:
+    get:
+      description: Fetch all users deposits
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch deposits
+      tags:
+      - Admin Dashboard
+  /admin/deposit/{id}/approve:
+    put:
+      consumes:
+      - application/json
+      description: Approve user deposits
+      parameters:
+      - description: Deposit ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Approve deposit
+      tags:
+      - Admin Action
+  /admin/deposit/{id}/decline:
+    put:
+      consumes:
+      - application/json
+      description: Decline user deposits
+      parameters:
+      - description: id
+        example: 550e8400-e29b-41d4-a716-446655440000
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Decline deposit
+      tags:
+      - Admin Action
+  /admin/deposit/pending:
+    get:
+      description: Fetch all pending users deposits
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch pending deposits
+      tags:
+      - Admin Dashboard
+  /admin/investment/active:
+    get:
+      description: Fetch Active investment
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch Active investment
+      tags:
+      - Admin Dashboard
+  /admin/kyc:
+    get:
+      description: Fetch all users kyc data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch kyc
+      tags:
+      - Admin Dashboard
+  /admin/kyc/{id}/approve:
+    put:
+      consumes:
+      - application/json
+      description: Approve user kyc
+      parameters:
+      - description: kyc ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Approve kyc
+      tags:
+      - Admin Action
+  /admin/kyc/{id}/decline:
+    put:
+      consumes:
+      - application/json
+      description: Decline user kyc
+      parameters:
+      - description: kyc ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Decline kyc
+      tags:
+      - Admin Action
+  /admin/kyc/pending:
+    get:
+      description: Fetch all pending users kyc data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch pending kyc
+      tags:
+      - Admin Dashboard
+  /admin/plan/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete investment plan
+      parameters:
+      - description: Plan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete plan
+      tags:
+      - Admin Action
+  /admin/plans:
+    post:
+      consumes:
+      - application/json
+      description: Create new inv plan
+      parameters:
+      - description: plan data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PlanDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Create new plan
+      tags:
+      - Admin Action
+  /admin/users:
+    get:
+      description: Fetch all user data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch all users
+      tags:
+      - Admin Dashboard
+  /admin/users/{id}:
+    get:
+      description: Fetch user data
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch user
+      tags:
+      - Admin Dashboard
+  /admin/users/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete user account as an admin
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user account
+      tags:
+      - Admin Action
+  /admin/users/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: update user account status as an admin
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user account status
+      tags:
+      - Admin Action
+  /admin/users/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: update user account as an admin
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update user data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserBalanceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user account
+      tags:
+      - Admin Action
+  /admin/walletaddress:
+    get:
+      consumes:
+      - application/json
+      description: Get all admin wallets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all admin wallets
+      tags:
+      - Admin Dashboard
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add wallet as admin
+      parameters:
+      - description: Coinlogo Image
+        in: formData
+        name: coin_logo
+        required: true
+        type: file
+      - description: QR code  Image
+        in: formData
+        name: qr_code
+        required: true
+        type: file
+      - description: Coin name
+        in: formData
+        name: coin
+        required: true
+        type: string
+      - description: Wallet address
+        in: formData
+        name: address
+        required: true
+        type: string
+      - description: Coin network
+        in: formData
+        name: network
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Add wallet
+      tags:
+      - Admin Action
+  /admin/walletaddress/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete selected wallet
+      parameters:
+      - description: wallet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: delete wallet
+      tags:
+      - Admin Action
+  /admin/withdrawal:
+    get:
+      description: Fetch all users withdrawals
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch withdrawals
+      tags:
+      - Admin Dashboard
+  /admin/withdrawal/{id}/approve:
+    put:
+      consumes:
+      - application/json
+      description: Approve user withdrawal
+      parameters:
+      - description: withdrawal ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Approve withdrawal
+      tags:
+      - Admin Action
+  /admin/withdrawal/{id}/decline:
+    put:
+      consumes:
+      - application/json
+      description: Decline user withdrawal
+      parameters:
+      - description: withdrawal ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Decline withdrawal
+      tags:
+      - Admin Action
+  /admin/withdrawal/pending:
+    get:
+      description: Fetch all pending user withdrawals
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Fetch pending withdrawals
+      tags:
+      - Admin Dashboard
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account with email, fullname, phone, and password
+      parameters:
+      - description: User registration data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterUserDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Register a new user
+      tags:
+      - Authentication
+  /forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Sends a password reset link to the user's email
+      parameters:
+      - description: Password reset request data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ResetPasswordLinkDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Request password reset link
+      tags:
+      - Authentication
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user account using email and password
+      parameters:
+      - description: login user data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Login User
+      tags:
+      - Authentication
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: verify refresh token and send back a new access token
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Refresh token
+      tags:
+      - Authentication
+  /reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset user password from token
+      parameters:
+      - description: Password reset request data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ResetPasswordDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Reset user password
+      tags:
+      - Authentication
+  /user/dashboard:
+    get:
+      description: Returns dashboard data for the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: User dashboard page
+      tags:
+      - User Dashboard
+  /user/deposits:
+    get:
+      description: Returns deposit page data for the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: User deposit page data
+      tags:
+      - User Dashboard
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new deposit for a user
+      parameters:
+      - description: Deposit Amount
+        in: formData
+        name: amount
+        required: true
+        type: number
+      - description: Deposit Proof Image
+        in: formData
+        name: deposit_proof
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: New deposit
+      tags:
+      - User Action
+  /user/investment/{id}:
+    post:
+      consumes:
+      - application/json
+      description: User subscribing to an investment plan
+      parameters:
+      - description: Investment Plan ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: join plan data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InvestmentDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Subscribe to an investment plan
+      tags:
+      - User Action
+  /user/kyc/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload user KYC ID front and back images
+      parameters:
+      - description: ID Front Image
+        in: formData
+        name: id_front
+        required: true
+        type: file
+      - description: ID Back Image
+        in: formData
+        name: id_back
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Upload KYC documents
+      tags:
+      - User Action
+  /user/packages:
+    get:
+      description: Returns investment page data for the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: User investment page data
+      tags:
+      - User Dashboard
+  /user/profiles:
+    get:
+      description: Returns user profile page data for the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: User profile page data
+      tags:
+      - User Dashboard
+  /user/transactions:
+    get:
+      description: Returns transaction page data for the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: User transaction page data
+      tags:
+      - User Dashboard
+  /user/update-password:
+    patch:
+      consumes:
+      - application/json
+      description: update user password from profile settings
+      parameters:
+      - description: Password Update data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePasswordDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user password
+      tags:
+      - User Action
+  /user/withdrawal:
+    post:
+      consumes:
+      - application/json
+      description: Create a new withdrawal for user
+      parameters:
+      - description: withdrawal data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.WithdrawalDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      security:
+      - BearerAuth: []
+      summary: New withdrawal
+      tags:
+      - User Action
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

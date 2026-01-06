@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>KYC Verification Approved</title>
+    <style>
+        /* General email reset */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .message {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        p {
+            color: #555555;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #999999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="message">
+            <h2>KYC Verification Approved ✅</h2>
+            <p>Hello {{ .Fullname }},</p>
+            <p>We are pleased to inform you that your <span class="highlight">KYC verification</span> has been
+                successfully approved.</p>
+            <p>You can now access all account features, including deposits, withdrawals, and investments without
+                restrictions.</p>
+            <p>We appreciate your patience and for helping us keep our platform secure.</p>
+            <p>Thank you for trusting <b>{{ .CompanyName }}</b>!</p>
+
+            <div class="footer">
+                <p>This is an automated message, please do not reply.</p>
+                <p>&copy; {{ .CompanyName }} — All Rights Reserved</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
