@@ -10,7 +10,6 @@ import (
 
 	"github.com/coinserveringo/config"
 	"github.com/coinserveringo/internal/apperrors"
-	"github.com/coinserveringo/internal/db"
 	"github.com/coinserveringo/internal/user/dto"
 	"github.com/coinserveringo/internal/user/repository"
 	"github.com/coinserveringo/mail"
@@ -48,7 +47,7 @@ func (u *UserService) Create(ctx context.Context, user dto.RegisterUserDTO) erro
 	hashedPassword := string(password)
 	referalLink := u.cfg.AppURL + "/" + uuid.New().String()
 
-	params := db.CreateUserParams{
+	params := dto.UserDataDTO{
 		Email:       user.Email,
 		Role:        "user",
 		Fullname:    user.Fullname,

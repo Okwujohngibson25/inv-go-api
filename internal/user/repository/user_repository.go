@@ -11,7 +11,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(ctx context.Context, data *db.CreateUserParams) error
+	Create(ctx context.Context, data *dto.UserDataDTO) error
 	GetUserByID(ctx context.Context, id uuid.UUID) (*dto.UserDataDTO, error)
 	UpdateUserBalancebyId(ctx context.Context, id uuid.UUID, newBalance decimal.Decimal) error
 	GetUserByEmail(ctx context.Context, email string) (*dto.UserDataDTO, error)
@@ -38,7 +38,7 @@ func NewSqlcRepository(conn *sql.DB) *SqlcRepository {
 	}
 }
 
-func (r *SqlcRepository) Create(ctx context.Context, data *db.CreateUserParams) error {
+func (r *SqlcRepository) Create(ctx context.Context, data *dto.UserDataDTO) error {
 	params := db.CreateUserParams{
 		Email:       data.Email,
 		Role:        data.Role,

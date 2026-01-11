@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/coinserveringo/config"
-	"github.com/coinserveringo/internal/db"
+	"github.com/coinserveringo/internal/user/dto"
 	"github.com/coinserveringo/utils"
 )
 
@@ -29,7 +29,7 @@ func (u *UserService) SeedAdmin(ctx context.Context, cfg *config.Config) {
 	}
 
 	// Create the super admin
-	admin := db.CreateUserParams{
+	admin := dto.UserDataDTO{
 		Email:       cfg.AdminEmail,
 		Role:        "admin",
 		Fullname:    "System Administrator",
